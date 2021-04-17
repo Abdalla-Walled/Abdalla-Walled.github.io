@@ -1,6 +1,6 @@
 ---
 layout: post
-title: You're up and running!
+title: OSCP Preperation
 published: true
 ---
 This is My First Blog
