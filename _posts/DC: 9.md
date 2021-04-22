@@ -69,7 +69,8 @@ HTTP
 we found sql injection in search page 
 
 Tom'-- -
-![img1]({{site.baseurl}}/_posts/1.png)
+![1]({{site.baseurl}}/_posts/1.png)
+
 
 
 
@@ -342,7 +343,4 @@ ACCOUNT FOUND: [ssh] Host: 192.168.162.136 User: fredf Password: B4-Tru3-001 [SU
 -     (ALL : ALL) ALL
 - joeyt@dc-9:~$ sudo bash
 
-'root@dc-9:/home/joeyt# 
-
-
-
+'root@dc-9:/home/joeyt#
