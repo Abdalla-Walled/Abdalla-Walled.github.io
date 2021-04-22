@@ -1,5 +1,5 @@
 ---
-published: false
+published: true
 ---
 Hello All , This Is my write up for DC: 9 Machine 
 Machine Link :https://www.vulnhub.com/entry/dc-9,412/
