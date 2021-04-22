@@ -75,14 +75,3 @@ Tom'-- -
 
 tring to detect columns number to run UNION query...
 found that they are 6 columns   ### Tom' ORDER BY 6-- -
-
-
-
-
- 
-
-
-
-
-
-
